@@ -23,15 +23,27 @@ export const ListProvider = ({
 
     const storedState = localStorage.getItem('@list-context/list');
 
-    if (storedState) {
-      dispatch({
-        type: 'GET_INITIAL_VALUE',
-        payload: {
-          initialValue: JSON.parse(storedState),
-        },
-      });
+    if (!storedState) {
+      return;
     }
+
+    dispatch({
+      type: 'GET_INITIAL_VALUE',
+      payload: {
+        initialValue: JSON.parse(storedState),
+      },
+    });
   }, []);
+
+  useEffect(() => {
+    if (!saveOnLocalStorage) {
+      return;
+    }
+
+    const stateAsJSON = JSON.stringify(list);
+
+    localStorage.setItem('@list-context/list', stateAsJSON);
+  }, [list]);
 
   const removeFromList = (id: string | number, callback?: () => void) => {
     dispatch({
@@ -63,9 +75,15 @@ export const ListProvider = ({
     callback && callback();
   };
 
+  const getOnlyIds = () => {
+    const idsList = list.map((object: Schema) => object.id);
+
+    return idsList;
+  };
+
   return (
     <ListContext.Provider
-      value={{ removeFromList, addToList, emptyList, list }}
+      value={{ removeFromList, addToList, emptyList, list, getOnlyIds }}
     >
       {children}
     </ListContext.Provider>

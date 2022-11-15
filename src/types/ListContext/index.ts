@@ -19,5 +19,6 @@ export interface ListContextProps {
   removeFromList: (id: string | number, callBack?: () => void) => void;
   addToList: (object: Schema, callBack?: () => void) => void;
   emptyList: (callBack?: () => void) => void;
+  getOnlyIds: () => (string | number)[];
   list: Schema[];
 }

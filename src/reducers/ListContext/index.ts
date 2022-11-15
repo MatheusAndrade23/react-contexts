@@ -13,9 +13,19 @@ export const listReducer = (state: Schema[], action: ActionType) => {
     }
 
     case 'ADD_TO_LIST': {
+      const { object } = action.payload;
+
+      const newList = [...state, object];
+
+      return newList;
     }
 
     case 'REMOVE_FROM_LIST': {
+      const { id } = action.payload;
+
+      const newList = state.filter((object: Schema) => object.id !== id);
+
+      return newList;
     }
 
     default:
